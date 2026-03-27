@@ -7,25 +7,27 @@ from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    # percorso del pacchetto nav2_bringup
+    # nav2_bringup and fra2mo_navigation package paths
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
     fra2mo_nav_dir = FindPackageShare('fra2mo_navigation')
     nav2_params_path = PathJoinSubstitution([fra2mo_nav_dir, 'config', 'nav2_params.yaml'])
-    # Percorso della mappa
+    # Map path
     map_path = PathJoinSubstitution([fra2mo_nav_dir, 'maps', 'mappa_leonardo.yaml'])
 
-
+    #Navigation Node,
+    # this launch file is used to start the navigation stack with AMCL localization.
     navigation_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 PathJoinSubstitution([nav2_bringup_dir, 'launch', 'navigation_launch.py'])
             ),
             launch_arguments={
-                'use_sim_time': 'true',  # Obbligatorio a 'true' se stai usando Gazebo
+                'use_sim_time': 'true',  
                 'params_file': nav2_params_path
             }.items()
         )
     
-
+    #AMCL Localization Node,
+    # this launch file is used to start the AMCL localization node 
     amcl_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 PathJoinSubstitution([nav2_bringup_dir, 'launch', 'localization_launch.py'])
@@ -36,6 +38,9 @@ def generate_launch_description():
                 'params_file': nav2_params_path
             }.items()
         )
+    
+
+    
     return LaunchDescription([
         navigation_launch,
         amcl_launch

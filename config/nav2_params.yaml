@@ -1,5 +1,5 @@
 # ==========================================================
-# File di configurazione Nav2 per Robot Differenziale (fra2mo)
+# File configuration for Nav2 (fra2mo)
 # ROS2 Humble
 # ==========================================================
 map_server:
